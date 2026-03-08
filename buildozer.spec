@@ -1,7 +1,7 @@
 [app]
 
 # (str) Title of your application
-title = Boss Battle
+title = Boss Battle beta-0.3
 
 # (str) Package name
 package.name = bossbattle
@@ -16,10 +16,10 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,json
 
 # (str) Application versioning
-version = 0.2
+version = 0.3
 
 #apk name
-android.release_name = bossbattle-0.2.apk
+android.file_name = bossbattle-0.3.apk
 
 # (list) Application requirements
 requirements = python3,kivy
@@ -49,7 +49,7 @@ android.ndk = 25b
 android.build_tools = 33.0.2
 
 # (list) Permissions
-android.permissions = 
+android.permissions = WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
 
 # (list) Android archs
 android.archs = arm64-v8a,armeabi-v7a
@@ -59,3 +59,6 @@ android.archs = arm64-v8a,armeabi-v7a
 
 # (str) Android NDK path (leave empty for auto-detection)
 # android.ndk_path =
+
+# Include fonts in APK
+include_exts = png,jpg,kv,atlas,ttf,otf
