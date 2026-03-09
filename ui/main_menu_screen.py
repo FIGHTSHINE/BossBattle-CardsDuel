@@ -5,10 +5,17 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.core.window import Window
-
+from kivy.app import App  # ✅ 添加这一行
+from kivy.graphics import Color, Rectangle, RoundedRectangle
+from ui.menu_builders import MenuTheme
+from ui.menu_builders import PopupFactory
 from game.translations import t, language_manager
 from ui.font_config import get_chinese_font_name
 
+from ui.menu_builders import TitleBuilder
+from ui.menu_builders import ModeSectionBuilder
+from ui.menu_builders import OptionsSectionBuilder
+from ui.menu_builders import MuteButtonBuilder
 
 class MainMenuScreen(BoxLayout):
     """Main menu screen with game mode selection."""
@@ -26,8 +33,8 @@ class MainMenuScreen(BoxLayout):
         """
         super().__init__(**kwargs)
         self.orientation = 'vertical'
-        self.padding = '30sp'
-        self.spacing = '12sp'
+        self.padding = '20sp'
+        self.spacing = '10sp'
         
         self.on_start_game = on_start_game
         self.on_language = on_language
@@ -44,137 +51,52 @@ class MainMenuScreen(BoxLayout):
         self.build_ui()
     
     def build_ui(self):
-        """Build the main menu UI."""
-        # Main title
-        title = Label(
-            text=t('MENU_TITLE'),
-            font_size='40sp',
-            size_hint_y=0.15,
-            color=(0.2, 0.6, 1, 1),
-            bold=True,
-            font_name=self.chinese_font or 'Roboto',
-            halign='center',
-            valign='middle'
-        )
+        """Build the main menu UI using modular builders."""
+        # Title section
+        title = TitleBuilder.build(self.chinese_font)
         self.add_widget(title)
         
         # Game mode selection section
-        mode_label = Label(
-            text=t('MENU_SELECT_MODE'),
-            font_size='22sp',
-            size_hint_y=0.05,
-            color=(0.8, 0.8, 0.8, 1),
-            bold=True,
-            font_name=self.chinese_font or 'Roboto'
+        mode_widgets = ModeSectionBuilder.build(
+            self.chinese_font,
+            self._on_mode_selected
         )
-        self.add_widget(mode_label)
+        for widget in mode_widgets:
+            self.add_widget(widget)
         
-        # Boss Duel button (working mode - green)
-        boss_duel_btn = Button(
-            text=t('MENU_MODE_BOSS_DUEL'),
-            font_size='26sp',
-            size_hint_y=0.15,
-            bold=True,
-            background_color=(0.2, 0.7, 0.3, 1),  # Green
-            font_name=self.chinese_font or 'Roboto'
+        # Options section
+        option_widgets = OptionsSectionBuilder.build(
+            self.chinese_font,
+            lambda: self._callback(self.on_language),
+            lambda: self._callback(self.on_about),
+            lambda: self._callback(self.on_exit)
         )
-        boss_duel_btn.bind(on_press=lambda instance: self._on_mode_selected('boss_duel'))
-        self.add_widget(boss_duel_btn)
+        for widget in option_widgets:
+            self.add_widget(widget)
         
-        # Survival Mode (coming soon - grayed out)
-        survival_btn = Button(
-            text=t('MENU_MODE_SURVIVAL'),
-            font_size='20sp',
-            size_hint_y=0.12,
-            background_color=(0.4, 0.4, 0.4, 1),  # Gray
-            font_name=self.chinese_font or 'Roboto',
-            disabled=True
+        # Mute button
+        mute_btn = MuteButtonBuilder.build(
+            self.chinese_font,
+            self._toggle_mute
         )
-        self.add_widget(survival_btn)
-        
-        # PvP Mode (coming soon - grayed out)
-        pvp_btn = Button(
-            text=t('MENU_MODE_PVP'),
-            font_size='20sp',
-            size_hint_y=0.12,
-            background_color=(0.4, 0.4, 0.4, 1),  # Gray
-            font_name=self.chinese_font or 'Roboto',
-            disabled=True
-        )
-        self.add_widget(pvp_btn)
-        
-        # Spacer
-        spacer = Label(
-            text='',
-            size_hint_y=0.05
-        )
-        self.add_widget(spacer)
-        
-        # Options label
-        options_label = Label(
-            text=t('MENU_OPTIONS'),
-            font_size='18sp',
-            size_hint_y=0.04,
-            color=(0.7, 0.7, 0.7, 1),
-            font_name=self.chinese_font or 'Roboto'
-        )
-        self.add_widget(options_label)
-        
-        # Language button (blue)
-        lang_btn = Button(
-            text=t('MENU_LANGUAGE'),
-            font_size='18sp',
-            size_hint_y=0.10,
-            background_color=(0.3, 0.5, 0.9, 1),  # Blue
-            font_name=self.chinese_font or 'Roboto'
-        )
-        lang_btn.bind(on_press=lambda i: self._callback(self.on_language))
-        self.add_widget(lang_btn)
-        
-        # About button (purple)
-        about_btn = Button(
-            text=t('MENU_ABOUT'),
-            font_size='18sp',
-            size_hint_y=0.10,
-            background_color=(0.6, 0.3, 0.8, 1),  # Purple
-            font_name=self.chinese_font or 'Roboto'
-        )
-        about_btn.bind(on_press=lambda i: self._callback(self.on_about))
-        self.add_widget(about_btn)
-        
-        # Exit button (red)
-        exit_btn = Button(
-            text=t('MENU_EXIT'),
-            font_size='18sp',
-            size_hint_y=0.10,
-            background_color=(0.8, 0.3, 0.3, 1),  # Red
-            font_name=self.chinese_font or 'Roboto'
-        )
-        exit_btn.bind(on_press=lambda i: self._callback(self.on_exit))
-        self.add_widget(exit_btn)
-        
-        # Language indicator
-        lang_indicator = Label(
-            text=f"Language: {language_manager.current_language.upper()} | 语言: {language_manager.current_language.upper()}",
-            font_size='14sp',
-            size_hint_y=0.04,
-            color=(0.5, 0.5, 0.5, 1),
-            font_name=self.chinese_font or 'Roboto'
-        )
-        self.add_widget(lang_indicator)
+        self.add_widget(mute_btn)
+        self.mute_button = mute_btn
     
     def _on_mode_selected(self, mode):
-        """Handle game mode selection."""
+        """
+        Handle game mode selection.
+        
+        Shows rules popup first, then waits for user confirmation.
+        
+        Args:
+            mode: Game mode string ('boss_duel', 'survival', 'pvp')
+        """
         try:
             print(f"[MainMenu] _on_mode_selected called with mode: {mode}")
-            print(f"[MainMenu] self.on_start_game: {self.on_start_game}")
             
-            if self.on_start_game:
-                print(f"[MainMenu] Calling on_start_game...")
-                self.on_start_game(mode)
-                print(f"[MainMenu] on_start_game completed")
-            else:
-                print(f"[MainMenu] Warning: on_start_game is None")
+            # Show rules popup instead of directly starting game
+            self._show_mode_rules_popup(mode)
+            
         except Exception as e:
             print(f"[MainMenu] ❌ Error in _on_mode_selected: {e}")
             import traceback
@@ -206,51 +128,65 @@ class MainMenuScreen(BoxLayout):
             traceback.print_exc()
 
     def show_about_popup(self):
-        """Show about popup dialog."""
+        """Show about popup."""
+        popup = PopupFactory.create_about_popup(self.chinese_font)
+        popup.open()
+
+    def _toggle_mute(self, instance):
+        """Toggle mute button callback."""
+        app = App.get_running_app()
+        is_muted = app.audio_manager.toggle_mute()
+    
+        # Update button text and color
+        if is_muted:
+            instance.text = t('UI_MUTE_ON')  # "静音" / "Mute"
+            instance.background_color = (0.8, 0.3, 0.3, 0.8)
+        else:
+            instance.text = t('UI_MUTE_OFF')  # "声音" / "Sound"
+            instance.background_color = (0.3, 0.8, 0.3, 0.8)
+
+    def _show_mode_rules_popup(self, mode):
+        """
+        Show game mode rules confirmation popup.
+        
+        Args:
+            mode: Game mode string ('boss_duel', 'survival', 'pvp')
+        """
         try:
-            print(f"[MainMenu] show_about_popup called")
-            about_content = BoxLayout(orientation='vertical', padding='20sp', spacing='10sp')
-            
-            title_label = Label(
-                text=t('MENU_ABOUT_TITLE'),
-                font_size='24sp',
-                bold=True,
-                font_name=self.chinese_font or 'Roboto'
+            popup = PopupFactory.create_rules_popup(
+                mode, 
+                self.chinese_font, 
+                lambda: self._confirm_start_game(mode, popup)
             )
-            
-            content_label = Label(
-                text=t('MENU_ABOUT_CONTENT'),
-                font_size='16sp',
-                size_hint_y=0.5,
-                font_name=self.chinese_font or 'Roboto',
-                halign='center',
-                valign='middle',
-                text_size=(Window.width * 0.8, None)
-            )
-            
-            close_btn = Button(
-                text='OK',
-                font_size='18sp',
-                size_hint_y=0.2,
-                background_color=(0.5, 0.5, 0.5, 1),
-                font_name=self.chinese_font or 'Roboto'
-            )
-            
-            about_content.add_widget(title_label)
-            about_content.add_widget(content_label)
-            about_content.add_widget(close_btn)
-            
-            popup = Popup(
-                title='About',
-                content=about_content,
-                size_hint=(0.8, 0.7),
-                auto_dismiss=False
-            )
-            
-            close_btn.bind(on_press=popup.dismiss)
             popup.open()
-            print(f"[MainMenu] show_about_popup completed")
+            
         except Exception as e:
-            print(f"[MainMenu] ❌ Error in show_about_popup: {e}")
+            print(f"[MainMenu] ❌ Error in _show_mode_rules_popup: {e}")
+            import traceback
+            traceback.print_exc()
+    
+    def _confirm_start_game(self, mode, popup):
+        """
+        Confirm and start game after rules confirmation.
+        
+        Args:
+            mode: Game mode string
+            popup: Popup instance to dismiss
+        """
+        try:
+            print(f"[MainMenu] _confirm_start_game called with mode: {mode}")
+            
+            # Dismiss popup first
+            popup.dismiss()
+            
+            # Start the game
+            if self.on_start_game:
+                print(f"[MainMenu] Starting game mode: {mode}")
+                self.on_start_game(mode)
+            else:
+                print(f"[MainMenu] Warning: on_start_game is None")
+                
+        except Exception as e:
+            print(f"[MainMenu] ❌ Error in _confirm_start_game: {e}")
             import traceback
             traceback.print_exc()

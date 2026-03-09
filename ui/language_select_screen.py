@@ -35,7 +35,7 @@ class LanguageSelectScreen(BoxLayout):
         """Build the language selection UI."""
         # Title
         title = Label(
-            text="🌍 语言选择 / Select Language 🌍",
+            text="语言选择 / Select Language",
             font_size='32sp',
             size_hint_y=0.3,
             color=(0.3, 0.8, 1, 1),
@@ -54,7 +54,7 @@ class LanguageSelectScreen(BoxLayout):
         
         # Chinese button
         zh_btn = Button(
-            text="🇨🇳 中文\n\n简体中文\nSimplified Chinese",
+            text="简体中文\nSimplified Chinese",
             font_size='24sp',
             size_hint_y=0.25,
             bold=True,
@@ -66,7 +66,7 @@ class LanguageSelectScreen(BoxLayout):
         
         # English button
         en_btn = Button(
-            text="🇺🇸 English\n\nEnglish Language\n英语",
+            text="English Language\n英语",
             font_size='24sp',
             size_hint_y=0.25,
             bold=True,

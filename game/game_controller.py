@@ -2,7 +2,7 @@
 
 from game.battle_manager import BattleManager
 from game.card_manager import CardManager
-from game.translation_strings import Translations as T
+from game.translations import Translations as T
 
 
 class GameController:

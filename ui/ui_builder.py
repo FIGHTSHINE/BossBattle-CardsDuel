@@ -4,11 +4,13 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.boxlayout import BoxLayout
-
+from ui.player.player_widget import PlayerWidget
+from ui.player.player_health_bar import PlayerHealthBar
 from ui.ui_logger import UILogger
 from ui.font_config import get_chinese_font_name
 from game.translations import t
-
+from ui.boss.boss_widget import BossWidget
+from ui.boss.boss_health_bar import BossHealthBar
 
 class UIBuilder:
     """Builds UI components for the game screen."""
@@ -80,9 +82,6 @@ class UIBuilder:
         Returns:
             tuple: (boss_layout, boss_widget, hp_label, health_bar)
         """
-        from ui.boss_widget import BossWidget
-        from ui.boss_health_bar import BossHealthBar
-        
         # Create vertical layout for boss + health bar
         main_layout = BoxLayout(
             orientation='vertical',
@@ -138,8 +137,6 @@ class UIBuilder:
         Returns:
             tuple: (player_layout, player_widget, hp_label, health_bar)
         """
-        from ui.player_widget import PlayerWidget
-        from ui.player_health_bar import PlayerHealthBar
         
         # Create vertical layout for player + health bar
         main_layout = BoxLayout(
@@ -257,7 +254,7 @@ class UIBuilder:
             callback: Function to call when button is pressed
         """
         button = Button(
-            text=t('UI_END_TURN'),
+            text= t('UI_END_TURN'),
             size_hint_y=0.08,
             font_size='20sp',
             bold=True,

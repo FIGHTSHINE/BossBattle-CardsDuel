@@ -1,7 +1,7 @@
 """Stats display component."""
 
 from typing import Optional
-from game.translation_strings import Translations as T
+from game.translations import Translations as T
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
@@ -96,7 +96,7 @@ class StatsDisplay(BoxLayout):
         self.labels['turn'].text = T.UI_TURN_COUNTER['zh'].format(stats['turn'])
         
         # Update boss HP text, widget visual state, and health bar
-        self.labels['boss_hp'].text = f"👹 BOSS: {stats['boss_hp']}/{stats['boss_max_hp']}"
+        self.labels['boss_hp'].text = f"BOSS: {stats['boss_hp']}/{stats['boss_max_hp']}"
         
         if self.boss_widget:
             hp_percent = (stats['boss_hp'] / stats['boss_max_hp']) * 100
@@ -123,9 +123,9 @@ class StatsDisplay(BoxLayout):
         if self.player_health_bar:
             self.player_health_bar.update_hp(stats['player_hp'], stats['player_max_hp'])
         
-        self.labels['player_hp'].text = f"❤️ YOU: {stats['player_hp']}/{stats['player_max_hp']}"
+        self.labels['player_hp'].text = f"YOU: {stats['player_hp']}/{stats['player_max_hp']}"
         # ✅ 添加这一行：更新护盾标签
-        self.labels['shield'].text = f"🛡️ 护盾: {stats['shield']}"
+        self.labels['shield'].text = f"护盾: {stats['shield']}"
         
         # Update cards info
         hand = stats['cards_in_hand']
@@ -194,7 +194,7 @@ class StatsDisplay(BoxLayout):
         """
         self.labels['boss_hp'].color = (0, 1, 0, 1)
         # ✅ 修改：使用翻译系统
-        victory_text = f"[size=28][color=00ff00]🎉 胜利! 🎉[/color][/size]\n[size=20]{T.UI_VICTORY_TURNS['zh'].format(turns)}[/size]"
+        victory_text = f"[size=28][color=00ff00] 胜利! [/color][/size]\n[size=20]{T.UI_VICTORY_TURNS['zh'].format(turns)}[/size]"
         self.labels['battle_area'].text = victory_text
         self.labels['battle_area'].color = (0, 1, 0, 1)
     
@@ -207,7 +207,7 @@ class StatsDisplay(BoxLayout):
         """
         self.labels['player_hp'].color = (1, 0, 0, 1)
         # ✅ 修改：使用翻译系统
-        defeat_text = f"[size=28][color=ff3333]💀 失败 💀[/color][/size]\n[size=20]{T.UI_DEFEAT_TURNS['zh'].format(turns)}[/size]"
+        defeat_text = f"[size=28][color=ff3333] 失败! [/color][/size]\n[size=20]{T.UI_DEFEAT_TURNS['zh'].format(turns)}[/size]"
         self.labels['battle_area'].text = defeat_text
         self.labels['battle_area'].color = (1, 0.2, 0.2, 1)
         
@@ -223,7 +223,7 @@ class StatsDisplay(BoxLayout):
             # ✅ fix
             text=T.UI_BOSS_WARNING.get(language_manager.current_language, T.UI_BOSS_WARNING['en']),
             size_hint_y=None,
-            height='40sp',  # 保持初始高度
+            height='50sp',  # 保持初始高度
             color=(1, 0.3, 0, 1),  # Orange-red color
             bold=True,
             halign='center',
@@ -258,5 +258,5 @@ class StatsDisplay(BoxLayout):
         """
         if 'battle_area' in self.labels:
             # ✅ 修改：汉化 Boss 大招使用提示
-            self.labels['battle_area'].text = "[size=20][color=ff6600]🔥 Boss 已使用大招! 🔥[/color][/size]"
+            self.labels['battle_area'].text = "[size=20][color=ff6600]Boss 已使用大招![/color][/size]"
             self.labels['battle_area'].color = (1, 0.4, 0, 1)
