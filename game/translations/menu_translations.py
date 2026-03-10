@@ -16,7 +16,7 @@ class MenuTranslations:
     
     # Game modes
     MODE_BOSS_DUEL = {
-        'zh': " 怪兽 争霸",
+        'zh': " 怪兽 对决",
         'en': " Boss Duel"
     }
     
@@ -47,8 +47,8 @@ class MenuTranslations:
     }
     
     ABOUT_TITLE = {
-        'zh': " Boss Battle v1.0",
-        'en': " Boss Battle v1.0"
+        'zh': " Boss Battle v3.0",
+        'en': " Boss Battle v3.0"
     }
     
     ABOUT_CONTENT = {
@@ -89,7 +89,7 @@ class MenuTranslations:
     
     # ✅ Game Mode Rules
     MODE_RULES_BOSS_DUEL = {
-        'zh': "【怪兽争霸】\n\n• 拼尽全力击败他!\n\n• 每回合可使用3张卡牌\n• 每回合可抽取2张卡牌\n• 攻击卡：对BOSS造成伤害\n• 治疗卡：恢复自己的生命值\n• 护盾卡：抵挡BOSS的攻击\n• 暴击卡：造成双倍伤害(概率)\n\n准备好开始不死不休了吗？",
+        'zh': "【怪兽争霸】\n\n• 拼尽全力击败他!\n\n• 每回合可使用3张卡牌\n• 每回合可抽取2张卡牌\n• 攻击卡：对BOSS造成伤害\n• 治疗卡：恢复自己的生命值\n• 护盾卡：抵挡BOSS的攻击\n• 暴击卡：造成双倍伤害(概率)\n\n准备好了吗？",
         'en': "【Boss Duel Rules】\n\nGoal: Defeat the BOSS to win!\n\n• Play up to 3 cards per turn\n• Draw up to 2 cards per turn\n• Attack cards: Deal damage to BOSS\n• Heal cards: Restore your HP\n• Shield cards: Block BOSS attacks\n• Critical cards: Deal double damage\n\nReady to battle?"
     }
     

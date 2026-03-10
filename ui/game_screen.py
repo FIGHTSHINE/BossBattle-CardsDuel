@@ -15,6 +15,7 @@ from ui.turn_event_handler import TurnEventHandler
 from game.models import CardType
 from game.translations import Translations as T
 from utils.screen_config import ScreenConfig
+from ui.game_screen_refresh import GameScreenRefreshManager
 
 class GameScreen(BoxLayout):
     """
@@ -80,7 +81,12 @@ class GameScreen(BoxLayout):
             )
             self.turn_handler = TurnEventHandler(self.controller, self)
             print("[GameScreen] All managers created")
-            
+
+            # Initialize refresh manager for UI scaling logic
+            print("[GameScreen] Creating GameScreenRefreshManager...")
+            self.refresh_manager = GameScreenRefreshManager(self)
+            print("[GameScreen] GameScreenRefreshManager created")
+
             # Build UI
             print("[GameScreen] Building UI...")
             UILogger.log_ui_build_start()
@@ -208,6 +214,9 @@ class GameScreen(BoxLayout):
             size_hint=(1, None),
             height=0  # 不参与 BoxLayout 空间分配
         )
+        # 🔧 添加这一行：
+        # Rebuild refresh manager to reference new components
+        self.refresh_manager = GameScreenRefreshManager(self)
 
         self.build_ui()
     
@@ -248,121 +257,4 @@ class GameScreen(BoxLayout):
 
         Preserves game state and re-adds game-over buttons if needed.
         """
-        try:
-            print("[GameScreen] Refreshing UI scaling...")
-
-            # ✅ 检查游戏是否结束
-            is_game_over = self.controller.is_game_over()
-            game_result = None
-            if is_game_over:
-                # 保存游戏结果（胜利/失败）
-                stats = self.controller.get_stats()
-                if stats['boss_hp'] <= 0:
-                    game_result = 'win'
-                elif stats['player_hp'] <= 0:
-                    game_result = 'lose'
-                print(f"[GameScreen] Game is over, result: {game_result}")
-
-            # ✅ 保存 effects_overlay 的子元素（如果有的话）
-            overlay_children = []
-            if hasattr(self, 'effects_overlay') and self.effects_overlay:
-                overlay_children = list(self.effects_overlay.children)
-                print(f"[GameScreen] Found {len(overlay_children)} children in effects_overlay")
-
-            # Refresh padding and spacing
-            self.padding = ScreenConfig.scale_padding(20)
-            self.spacing = ScreenConfig.scale_spacing(10)
-
-            # Refresh stats display if it exists
-            if hasattr(self, 'stats_display') and self.stats_display:
-                # Get current stats before rebuilding
-                stats = self.controller.get_stats()
-
-                # Remove old stats display
-                self.remove_widget(self.stats_display)
-
-                # Create new stats display
-                self.stats_display = StatsDisplay()
-                self.stats_display.build_stats(self.builder)
-                self.add_widget(self.stats_display, index=0)  # Add at top
-
-                # Update stats with current values
-                self.stats_display.update_stats(stats)
-                self.stats_display.update_turn_indicator(stats['is_player_turn'])
-                self.stats_display.update_cards_played(
-                    self.controller.battle.cards_played_this_turn,
-                    self.controller.battle.max_cards_per_turn
-                )
-
-                # Re-add end turn button
-                self.stats_display.add_end_turn_button(self.on_end_turn)
-
-            # Refresh hand display if it exists
-            if hasattr(self, 'hand_display') and self.hand_display:
-                # Get current hand using the correct method
-                hand = self.controller.get_hand()
-
-                # Remove old hand display
-                self.remove_widget(self.hand_display)
-
-                # Create new hand display
-                self.hand_display = HandDisplay(self.on_card_play)
-                self.add_widget(self.hand_display)
-
-                # Display current cards
-                if hand:
-                    self.hand_display.display_hand(hand, self.builder)
-
-            # ✅ 重新添加 effects_overlay（如果不在了）
-            if hasattr(self, 'effects_overlay') and self.effects_overlay:
-                # effects_overlay 已经存在，只需要确保它在正确的位置
-                if self.effects_overlay in self.children:
-                    self.remove_widget(self.effects_overlay)
-                self.add_widget(self.effects_overlay)
-                print(f"[GameScreen] Re-added effects_overlay at top layer")
-            else:
-                # effects_overlay 不存在，创建新的
-                self.effects_overlay = FloatLayout(
-                    size_hint=(1, None),
-                    height=0
-                )
-                self.add_widget(self.effects_overlay)
-                print(f"[GameScreen] Created new effects_overlay")
-
-            # ✅ 如果游戏结束了，重新显示游戏结束按钮
-            if is_game_over and game_result:
-                print(f"[GameScreen] Re-adding game-over buttons for {game_result}")
-                
-                # ✅ 清理 effects_overlay 中的旧按钮（避免重复添加）
-                if hasattr(self, 'effects_overlay') and self.effects_overlay:
-                    # 移除所有旧的子元素（按钮、火球等）
-                    # old_children = list(self.effects_overlay.children)
-                    for child in list(self.effects_overlay.children):
-                        if isinstance(child,BoxLayout):
-                            self.effects_overlay.remove_widget(child)
-                    print(f"[GameScreen] Removed old elements from effects_overlay")
-                
-                # ✅ 只添加按钮，不重复播放音效和显示文本
-                if game_result == 'win':
-                    # 不调用 show_win()，避免重复显示文本
-                    # 只添加按钮
-                    self.button_manager.add_game_over_buttons(
-                        restart_text=T.BTN_PLAY_AGAIN['zh'],
-                        on_restart=self.on_restart,
-                        on_menu=self.on_back_to_menu_clicked
-                    )
-                else:  # game_result == 'lose'
-                    # 不调用 show_lose()，避免重复显示文本
-                    # 只添加按钮
-                    self.button_manager.add_game_over_buttons(
-                        restart_text=T.BTN_TRY_AGAIN['zh'],
-                        on_restart=self.on_restart,
-                        on_menu=self.on_back_to_menu_clicked
-                    )
-
-            print("[GameScreen] UI refresh complete")
-
-        except Exception as e:
-            print(f"[GameScreen] Error refreshing UI: {e}")
-            import traceback
-            traceback.print_exc()
+        self.refresh_manager.refresh_ui()
