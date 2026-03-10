@@ -26,9 +26,9 @@ class MuteButtonBuilder:
         
         mute_btn = Button(
             text=mute_btn_text,
-            font_size=MenuTheme.FONT_SIZE_MUTE,
+            font_size=MenuTheme.font_size_mute(),
             size_hint=(None, None),
-            size=MenuTheme.MUTE_BTN_SIZE,
+            size=MenuTheme.mute_btn_size(),
             pos_hint=MenuTheme.MUTE_BTN_POS_HINT,
             background_color=MenuTheme.COLOR_MUTE_OFF,
             font_name=font_name or 'Roboto',

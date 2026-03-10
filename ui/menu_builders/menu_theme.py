@@ -1,4 +1,5 @@
 """Main menu theme configuration."""
+from utils.screen_config import ScreenConfig
 
 class MenuTheme:
     """Centralized theme configuration for main menu."""
@@ -24,25 +25,65 @@ class MenuTheme:
     COLOR_POPUP_BACK_BTN = (0.4, 0.4, 0.5, 1)  # Darker gray
     COLOR_POPUP_CONFIRM_BTN = (0.1, 0.7, 0.3, 1)  # Brighter green
     
-    # ============ Font Sizes ============
-    FONT_SIZE_TITLE = '40sp'
-    FONT_SIZE_MODE_LABEL = '22sp'
-    FONT_SIZE_BOSS_DUEL = '26sp'
-    FONT_SIZE_OTHER_MODES = '20sp'
-    FONT_SIZE_OPTIONS_LABEL = '18sp'
-    FONT_SIZE_OPTIONS_BTN = '18sp'
-    FONT_SIZE_LANG_INDICATOR = '14sp'
-    FONT_SIZE_MUTE = '35sp'
+    # ============ Font Sizes (Converted to Methods) ============
+    @staticmethod
+    def font_size_title():
+        return ScreenConfig.scale_font_size(40)
+    
+    @staticmethod
+    def font_size_mode_label():
+        return ScreenConfig.scale_font_size(22)
+    
+    @staticmethod
+    def font_size_boss_duel():
+        return ScreenConfig.scale_font_size(26)
+    
+    @staticmethod
+    def font_size_other_modes():
+        return ScreenConfig.scale_font_size(20)
+    
+    @staticmethod
+    def font_size_options_label():
+        return ScreenConfig.scale_font_size(18)
+    
+    @staticmethod
+    def font_size_options_btn():
+        return ScreenConfig.scale_font_size(18)
+    
+    @staticmethod
+    def font_size_lang_indicator():
+        return ScreenConfig.scale_font_size(14)
+    
+    @staticmethod
+    def font_size_mute():
+        return ScreenConfig.scale_font_size(35)
     
     # Popup font sizes
-    FONT_SIZE_POPUP_TITLE = '24sp'
-    FONT_SIZE_RULES_TEXT = '16sp'
-    FONT_SIZE_POPUP_BTN = '18sp'
-    FONT_SIZE_ABOUT_TITLE = '24sp'
-    FONT_SIZE_ABOUT_CONTENT = '16sp'
-    FONT_SIZE_ABOUT_BTN = '18sp'
+    @staticmethod
+    def font_size_popup_title():
+        return ScreenConfig.scale_font_size(24)
     
-    # ============ Size Hints ============
+    @staticmethod
+    def font_size_rules_text():
+        return ScreenConfig.scale_font_size(16)
+    
+    @staticmethod
+    def font_size_popup_btn():
+        return ScreenConfig.scale_font_size(18)
+    
+    @staticmethod
+    def font_size_about_title():
+        return ScreenConfig.scale_font_size(24)
+    
+    @staticmethod
+    def font_size_about_content():
+        return ScreenConfig.scale_font_size(16)
+    
+    @staticmethod
+    def font_size_about_btn():
+        return ScreenConfig.scale_font_size(18)
+    
+    # ============ Size Hints (Keep as-is - already proportional) ============
     SIZE_HINT_TITLE = 0.15
     SIZE_HINT_MODE_LABEL = 0.05
     SIZE_HINT_BOSS_DUEL = 0.15
@@ -68,18 +109,36 @@ class MenuTheme:
     # ============ Popup Dimensions ============
     POPUP_RULES_SIZE = (0.85, 0.75)
     POPUP_ABOUT_SIZE = (0.8, 0.7)
-    POPUP_BORDER_RADIUS = [20, 20, 20, 20]  # Rounded corners (20sp)
+    POPUP_BORDER_RADIUS = [20, 20, 20, 20]  # Rounded corners
     
-    # ============ Mute Button ============
-    MUTE_BTN_SIZE = ('60sp', '60sp')
+    # ============ Mute Button (Convert to Method) ============
+    @staticmethod
+    def mute_btn_size():
+        size = ScreenConfig.scale_spacing(60)
+        return (size, size)
+    
     MUTE_BTN_POS_HINT = {'right': 0.95, 'top': 0.95}
     
-    # ============ Layout Spacing ============
-    PADDING = '20sp'
-    SPACING = '10sp'
-    POPUP_PADDING = '25sp'
-    POPUP_SPACING = '15sp'
-    POPUP_BUTTON_SPACING = '10sp'
+    # ============ Layout Spacing (Convert to Methods) ============
+    @staticmethod
+    def padding():
+        return ScreenConfig.scale_spacing(20)
+    
+    @staticmethod
+    def spacing():
+        return ScreenConfig.scale_spacing(10)
+    
+    @staticmethod
+    def popup_padding():
+        return ScreenConfig.scale_spacing(25)
+    
+    @staticmethod
+    def popup_spacing():
+        return ScreenConfig.scale_spacing(15)
+    
+    @staticmethod
+    def popup_button_spacing():
+        return ScreenConfig.scale_spacing(10)
     
     # ============ Text Alignment ============
     # Main menu

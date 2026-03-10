@@ -33,7 +33,7 @@ orientation.Landscape = True
 orientation.Portrait = False
 
 # (bool) Indicate if the application should be fullscreen or not
-fullscreen = False
+fullscreen = True
 
 [android]
 

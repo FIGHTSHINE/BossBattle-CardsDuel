@@ -8,7 +8,8 @@ from kivy.uix.button import Button
 from game.translations import language_manager
 from ui.ui_logger import UILogger
 from ui.ui_builder import UIBuilder
-
+from utils.screen_config import ScreenConfig
+from ui.font_config import get_chinese_font_name
 
 class StatsDisplay(BoxLayout):
     """Displays game statistics (HP, shield, turn, etc)."""
@@ -18,7 +19,7 @@ class StatsDisplay(BoxLayout):
         super().__init__(**kwargs)
         self.orientation = 'vertical'
         self.size_hint_y = 0.5
-        self.spacing = '5sp'
+        self.spacing = ScreenConfig.scale_spacing(5)
         self.builder: Optional[UIBuilder] = None
         self.logger = UILogger()
         self.labels = {}
@@ -45,9 +46,9 @@ class StatsDisplay(BoxLayout):
         self.add_widget(self.labels['turn_indicator'])
         
         # Boss HP - WITH VISUAL WIDGET AND HEALTH BAR
-        boss_layout, self.boss_widget, boss_hp_label, self.boss_health_bar = builder.build_boss_widget(300, 300)
+        boss_layout, self.boss_widget, self.boss_health_bar = builder.build_boss_widget(300, 300)
         self.add_widget(boss_layout)
-        self.labels['boss_hp'] = boss_hp_label  # Store label for text updates
+        self.labels['boss_hp'] = self.boss_health_bar.hp_label  # Store label for text updates
 
         # ⚠️ ADD: Boss special attack warning label (initially hidden)
         self.labels['boss_warning'] = self._build_boss_warning_label()
@@ -58,9 +59,9 @@ class StatsDisplay(BoxLayout):
         self.add_widget(self.labels['battle_area'])
         
         # Player HP
-        player_layout, self.player_widget, player_hp_label, self.player_health_bar = builder.build_player_widget(100, 100, 0)
+        player_layout, self.player_widget, self.player_health_bar = builder.build_player_widget(100, 100, 0)
         self.add_widget(player_layout)
-        self.labels['player_hp'] = player_hp_label  # Store label for text updates
+        self.labels['player_hp'] = self.player_health_bar.hp_label  # Store label for text updates
         
         # Shield
         self.labels['shield'] = builder.build_shield_label()
@@ -194,7 +195,7 @@ class StatsDisplay(BoxLayout):
         """
         self.labels['boss_hp'].color = (0, 1, 0, 1)
         # ✅ 修改：使用翻译系统
-        victory_text = f"[size=28][color=00ff00] 胜利! [/color][/size]\n[size=20]{T.UI_VICTORY_TURNS['zh'].format(turns)}[/size]"
+        victory_text = f"{ScreenConfig.get_markup_size(28)}[color=00ff00] 胜利! [/color][/size]\n{ScreenConfig.get_markup_size(20)}{T.UI_VICTORY_TURNS['zh'].format(turns)}[/size]"
         self.labels['battle_area'].text = victory_text
         self.labels['battle_area'].color = (0, 1, 0, 1)
     
@@ -207,7 +208,7 @@ class StatsDisplay(BoxLayout):
         """
         self.labels['player_hp'].color = (1, 0, 0, 1)
         # ✅ 修改：使用翻译系统
-        defeat_text = f"[size=28][color=ff3333] 失败! [/color][/size]\n[size=20]{T.UI_DEFEAT_TURNS['zh'].format(turns)}[/size]"
+        defeat_text = f"{ScreenConfig.get_markup_size(28)}[color=ff3333] 失败! [/color][/size]\n{ScreenConfig.get_markup_size(20)}{T.UI_DEFEAT_TURNS['zh'].format(turns)}[/size]"
         self.labels['battle_area'].text = defeat_text
         self.labels['battle_area'].color = (1, 0.2, 0.2, 1)
         
@@ -219,16 +220,18 @@ class StatsDisplay(BoxLayout):
         Returns:
             Label: Configured warning label (initially hidden)
         """
+        chinese_font = get_chinese_font_name()
         warning_label = Label(
             # ✅ fix
             text=T.UI_BOSS_WARNING.get(language_manager.current_language, T.UI_BOSS_WARNING['en']),
             size_hint_y=None,
-            height='50sp',  # 保持初始高度
+            height=ScreenConfig.scale_height(50),
             color=(1, 0.3, 0, 1),  # Orange-red color
             bold=True,
             halign='center',
             valign='middle',
-            font_size='18sp',
+            font_size=ScreenConfig.scale_font_size(18),
+            font_name=chinese_font,
             opacity=0,  # Initially hidden
             markup=True,
             text_size=(None, None),  # ✅ 添加：让文本自动换行
@@ -258,5 +261,5 @@ class StatsDisplay(BoxLayout):
         """
         if 'battle_area' in self.labels:
             # ✅ 修改：汉化 Boss 大招使用提示
-            self.labels['battle_area'].text = "[size=20][color=ff6600]Boss 已使用大招![/color][/size]"
+            self.labels['battle_area'].text = f"{ScreenConfig.get_markup_size(20)}[color=ff6600]Boss 已使用大招![/color][/size]"
             self.labels['battle_area'].color = (1, 0.4, 0, 1)

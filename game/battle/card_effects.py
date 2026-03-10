@@ -20,7 +20,8 @@ class CardEffectHandler:
             tuple: (result_text, damage_dealt)
         """
         boss_hp_before = battle.boss_hp
-        battle.boss_hp -= card.value
+        # ✅ 限制最小值为 0
+        battle.boss_hp = max(0, battle.boss_hp - card.value)
         damage_dealt = card.value
         
         result_text = f"Used {card.name}! Dealt {card.value} damage!"
@@ -45,12 +46,14 @@ class CardEffectHandler:
         # 20% chance for double damage
         if random.random() < 0.2:
             damage = card.value * 2
-            battle.boss_hp -= damage
+            # ✅ 限制最小值为 0
+            battle.boss_hp = max(0, battle.boss_hp - damage)
             result_text = f"CRITICAL HIT! {card.name} deals {damage} damage!"
             print(f"[EFFECT] CRITICAL HIT! Boss HP {boss_hp_before} → {battle.boss_hp}")
         else:
             damage = card.value
-            battle.boss_hp -= damage
+            # ✅ 限制最小值为 0
+            battle.boss_hp = max(0, battle.boss_hp - damage)
             result_text = f"Used {card.name}! Dealt {card.value} damage!"
             print(f"[EFFECT] Attack: Boss HP {boss_hp_before} → {battle.boss_hp}")
         

@@ -132,7 +132,7 @@ class TurnEventHandler:
             # Start special attack animation
             boss_anim.special_attack_animation(
                 player_widget=self.screen.stats_display.player_widget,
-                parent_widget=self.screen,  # Add projectile to GameScreen
+                parent_widget=self.screen.effects_overlay,  # ✅ 改为使用覆盖层
                 callback=on_special_attack_complete
             )
             return True

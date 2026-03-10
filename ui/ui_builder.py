@@ -11,6 +11,8 @@ from ui.font_config import get_chinese_font_name
 from game.translations import t
 from ui.boss.boss_widget import BossWidget
 from ui.boss.boss_health_bar import BossHealthBar
+from utils.screen_config import ScreenConfig
+from kivy.uix.widget import Widget
 
 class UIBuilder:
     """Builds UI components for the game screen."""
@@ -37,7 +39,7 @@ class UIBuilder:
         """Build turn counter label."""
         label = Label(
             text=t('UI_TURN_COUNTER', turn),
-            font_size='20sp',
+            font_size=ScreenConfig.scale_font_size(20),
             size_hint_y=0.05,
             color=(0.8, 0.8, 0.8, 1),
             font_name=self.chinese_font or 'Roboto'
@@ -49,7 +51,7 @@ class UIBuilder:
         """Build turn indicator label."""
         label = Label(
             text=t('UI_TURN_PLAYER'),
-            font_size='24sp',
+            font_size=ScreenConfig.scale_font_size(24),
             size_hint_y=0.08,
             color=(0.3, 1, 0.5, 1),  # Green for player turn
             bold=True,
@@ -62,7 +64,7 @@ class UIBuilder:
         """Build boss HP label."""
         label = Label(
             text=t('UI_BOSS_HP', boss_hp, boss_max_hp),
-            font_size='32sp',
+            font_size=ScreenConfig.scale_font_size(32),
             size_hint_y=0.09,
             color=(1, 0.3, 0.3, 1),
             bold=True,
@@ -86,107 +88,90 @@ class UIBuilder:
         main_layout = BoxLayout(
             orientation='vertical',
             size_hint_y=0.2,
-            spacing='5sp'
+            spacing=ScreenConfig.scale_spacing(5)
         )
         
-        # Boss visual + HP text (horizontal)
-        boss_visual_layout = BoxLayout(
-            orientation='horizontal',
-            size_hint_y=0.5,
-            spacing='10sp',
-            padding='5sp'
-        )
         
         # Boss visual widget
         boss_widget = BossWidget()
         boss_widget.hp_percent = (boss_hp / boss_max_hp) * 100
-        boss_visual_layout.add_widget(boss_widget)
-        
+        main_layout.add_widget(boss_widget)
         # Boss HP text label (larger, above health bar)
-        hp_label = Label(
-            text=t('UI_BOSS_HP', boss_hp, boss_max_hp),
-            font_size='24sp',
-            size_hint_x=0.7,
-            color=(1, 0.3, 0.3, 1),
-            bold=True,
-            font_name=self.chinese_font or 'Roboto',
-            halign='left',
-            valign='middle'
-        )
-        boss_visual_layout.add_widget(hp_label)
+        # hp_label = Label(
+        #     text=t('UI_BOSS_HP', boss_hp, boss_max_hp),
+        #     font_size=ScreenConfig.scale_font_size(24),
+        #     size_hint_x=0.7,
+        #     color=(1, 0.3, 0.3, 1),
+        #     bold=True,
+        #     font_name=self.chinese_font or 'Roboto',
+        #     halign='left',
+        #     valign='middle'
+        # )
+        # main_layout.add_widget(hp_label)
         
-        main_layout.add_widget(boss_visual_layout)
-        
+        # main_layout.add_widget(boss_visual_layout)
         # Dynamic health bar (below boss visual)
         health_bar = BossHealthBar()
         health_bar.update_hp(boss_hp, boss_max_hp)
         main_layout.add_widget(health_bar)
         
         self.logger.log_ui_component_added("Boss widget with health bar")
-        return main_layout, boss_widget, hp_label, health_bar
+        return main_layout, boss_widget, health_bar
     
     def build_player_widget(self, player_hp=200, player_max_hp=200, player_shield=0):
         """
         Build player visual widget with HP label and health bar.
-        
+
         Args:
             player_hp: Current player HP
             player_max_hp: Maximum player HP
             player_shield: Current player shield value
-            
+
         Returns:
-            tuple: (player_layout, player_widget, hp_label, health_bar)
+            tuple: (player_layout, player_widget, health_bar)
         """
-        
+
         # Create vertical layout for player + health bar
         main_layout = BoxLayout(
             orientation='vertical',
             size_hint_y=0.25,
-            spacing='5sp'
+            spacing=ScreenConfig.scale_spacing(5)
         )
-        
-        # Player visual + HP text (horizontal)
+
+        # Player visual layout (horizontal, for right alignment)
+        # ✅ 保留这个容器用于右对齐Player widget
         player_visual_layout = BoxLayout(
             orientation='horizontal',
             size_hint_y=0.5,
-            spacing='10sp',
-            padding='5sp'
+            spacing=ScreenConfig.scale_spacing(10),
+            padding=ScreenConfig.scale_padding(5)
         )
-        
-        # Player HP text label (left side)
-        hp_label = Label(
-            text=t('UI_PLAYER_HP', player_hp, player_max_hp),
-            font_size='20sp',
-            size_hint_x=0.7,
-            color=(0.3, 1, 0.5, 1),  # Green for player
-            bold=True,
-            font_name=self.chinese_font or 'Roboto',
-            halign='left',
-            valign='middle'
-        )
-        player_visual_layout.add_widget(hp_label)
-        
+
+        # ✅ 添加一个透明占位符，将Player widget推到右侧
+        spacer = Widget(size_hint_x=1)  # 占据所有可用水平空间
+        player_visual_layout.add_widget(spacer)
+
         # Player visual widget (right side)
         player_widget = PlayerWidget()
         player_widget.hp_percent = (player_hp / player_max_hp) * 100
         player_widget.shield = player_shield
         player_visual_layout.add_widget(player_widget)
-        
+
         main_layout.add_widget(player_visual_layout)
-        
+
         # Dynamic health bar (below player visual)
         health_bar = PlayerHealthBar()
         health_bar.update_hp(player_hp, player_max_hp)
         main_layout.add_widget(health_bar)
-        
+
         self.logger.log_ui_component_added("Player widget with health bar")
-        return main_layout, player_widget, hp_label, health_bar
+        return main_layout, player_widget, health_bar
 
     def build_battle_area(self):
         """Build battle area label."""
         label = Label(
             text=t('UI_BATTLE_AREA_START'),
-            font_size='20sp',
+            font_size=ScreenConfig.scale_font_size(20),
             size_hint_y=0.18,
             color=(0.9, 0.9, 0.9, 1),
             halign='center',
@@ -201,7 +186,7 @@ class UIBuilder:
         """Build player HP label."""
         label = Label(
             text=t('UI_PLAYER_HP', player_hp, player_max_hp),
-            font_size='24sp',
+            font_size=ScreenConfig.scale_font_size(24),
             size_hint_y=0.07,
             color=(0.3, 1, 0.3, 1),
             bold=True,
@@ -214,7 +199,7 @@ class UIBuilder:
         """Build shield indicator label."""
         label = Label(
             text=t('UI_SHIELD_UP', shield_value),
-            font_size='18sp',
+            font_size=ScreenConfig.scale_font_size(18),
             size_hint_y=0.04,
             color=(0.3, 0.6, 1, 1),
             font_name=self.chinese_font or 'Roboto'
@@ -226,7 +211,7 @@ class UIBuilder:
         """Build cards remaining label."""
         label = Label(
             text=t('UI_CARDS_REMAINING', 20),
-            font_size='18sp',
+            font_size=ScreenConfig.scale_font_size(18),
             size_hint_y=0.04,
             color=(0.8, 0.8, 0.8, 1),
             font_name=self.chinese_font or 'Roboto'
@@ -238,7 +223,7 @@ class UIBuilder:
         """Build cards played counter label."""
         label = Label(
             text=t('UI_CARDS_THIS_TURN', 0, 3),
-            font_size='16sp',
+            font_size=ScreenConfig.scale_font_size(16),
             size_hint_y=0.04,
             color=(0.7, 0.7, 0.7, 1),
             font_name=self.chinese_font or 'Roboto'
@@ -256,7 +241,7 @@ class UIBuilder:
         button = Button(
             text= t('UI_END_TURN'),
             size_hint_y=0.08,
-            font_size='20sp',
+            font_size=ScreenConfig.scale_font_size(20),
             bold=True,
             background_color=(0.8, 0.4, 0.2, 1),  # Orange
             font_name=self.chinese_font or 'Roboto'
@@ -269,13 +254,13 @@ class UIBuilder:
         """Build card scroll area."""
         scroll = ScrollView(
             size_hint_y=0.39,
-            bar_width='10sp'
+            bar_width=ScreenConfig.scale_spacing(10)
         )
         
         layout = BoxLayout(
             size_hint_y=None,
-            spacing='8sp',
-            padding='10sp'
+            spacing=ScreenConfig.scale_spacing(8),
+            padding=ScreenConfig.scale_spacing(10)
         )
         layout.bind(minimum_height=layout.setter('height'))
         
@@ -292,11 +277,12 @@ class UIBuilder:
             card: Card object
             callback: Function to call when button is pressed
         """
+        # not use icon ,change use text to indicate card type, for better localization support
         card_icons = {
-            "attack": "⚔️",
-            "heal": "💚",
-            "shield": "🛡️",
-            "critical": "💥"
+            "attack": "ATK",
+            "heal": "REV",
+            "shield": "SHD",
+            "critical": "CRIT"
         }
         
         icon = card_icons.get(card.card_type.value, "❓")
@@ -304,8 +290,8 @@ class UIBuilder:
         btn = Button(
             text=f"{icon}\n{card.name}\n{card.value}",
             size_hint=(None, None),
-            size=(140, 100),
-            font_size='14sp',  # Slightly smaller for Chinese text
+            size=ScreenConfig.calculate_card_size(),
+            font_size=ScreenConfig.scale_font_size(14),  # Slightly smaller for Chinese text
             bold=True,
             font_name=self.chinese_font or 'Roboto'
         )
@@ -332,7 +318,7 @@ class UIBuilder:
         button = Button(
             text=button_text,
             size_hint_y=0.1,
-            font_size='22sp',
+            font_size=ScreenConfig.scale_font_size(22),
             bold=True,
             background_color=(0.2, 0.6, 1, 1),
             font_name=self.chinese_font or 'Roboto'

@@ -5,6 +5,7 @@ from kivy.uix.widget import Widget
 from kivy.core.window import Window
 from kivy.utils import platform
 from kivy.logger import Logger
+from kivy.clock import Clock
 from ui.language_select_screen import LanguageSelectScreen
 from ui.main_menu_screen import MainMenuScreen
 from ui.game_screen import GameScreen
@@ -22,23 +23,12 @@ class BossBattleApp(App):
         self.game_screen = None
         self.main_menu = None
         self.audio_manager = AudioManager()
+        self._last_window_size = None
     
     def build(self):
         """Build and return the root widget."""
+        # Window.fullscreen = 'auto'
         self.title = "Boss Battle - 卡牌战斗"
-        
-        # # ✅ 测试横屏模式
-        # if platform in ['win', 'macosx', 'linux']:
-        #     # Set initial window size for testing (phone size in landscape)
-        #     Window.size = (800, 480)  # Landscape mode
-        #     Logger.info(f"App: Desktop mode - Testing landscape mode")
-        # elif platform == 'android':
-        #     # Android: 设置为横屏
-        #     from jnius import autoclass # type: ignore
-        #     PythonActivity = autoclass('org.kivy.android.PythonActivity')
-        #     activity = PythonActivity.mActivity
-        #     activity.setRequestedOrientation(0)  # 0 = LANDSCAPE
-        #     Logger.info("App: Android - Forced landscape mode")
         
         # 注册字体
         init_fonts()
@@ -46,9 +36,60 @@ class BossBattleApp(App):
         # 初始化音频
         self._init_audio()
         
+        # ✅ Bind window size changes for dynamic scaling
+        Window.bind(size=self._on_window_resize)
+        self._last_window_size = Window.size
+        
         # 语言选择界面
         lang_screen = LanguageSelectScreen(self.on_language_selected)
         return lang_screen
+    
+    def _on_window_resize(self, instance, value):
+        """
+        Handle window resize events and refresh UI scaling.
+        
+        Args:
+            instance: Window instance
+            value: New window size (width, height)
+        """
+        new_size = value
+        
+        
+        # This avoids excessive refreshes during drag operations
+        if self._last_window_size:
+            width_change = abs(new_size[0] - self._last_window_size[0])
+            height_change = abs(new_size[1] - self._last_window_size[1])
+            
+            if width_change > 20 or height_change > 20:
+                Logger.info(f"App: Window resized to {new_size}, refreshing UI...")
+                # Schedule UI refresh on next frame (avoid blocking)
+                Clock.schedule_once(lambda dt: self._refresh_ui_scaling(), 0)
+                self._last_window_size = new_size
+    
+    def _refresh_ui_scaling(self):
+        """Refresh all UI elements with new scaling values."""
+        try:
+            # Refresh main menu if visible
+            if self.main_menu and hasattr(self.root, 'children'):
+                for child in self.root.children:
+                    if isinstance(child, MainMenuScreen):
+                        Logger.info("App: Refreshing main menu...")
+                        child.refresh_text()  # This already exists
+                        break
+            
+            # Refresh game screen if visible
+            if self.game_screen and hasattr(self.root, 'children'):
+                for child in self.root.children:
+                    if isinstance(child, GameScreen):
+                        Logger.info("App: Refreshing game screen...")
+                        if hasattr(self.game_screen, 'refresh_ui'):
+                            self.game_screen.refresh_ui()
+                        break
+            
+            Logger.info("App: UI scaling refresh complete")
+            
+        except Exception as e:
+            Logger.error(f"App: Error refreshing UI: {e}")
     
     def on_start(self):
         """Called when application starts."""

@@ -11,7 +11,7 @@ from ui.menu_builders import MenuTheme
 from ui.menu_builders import PopupFactory
 from game.translations import t, language_manager
 from ui.font_config import get_chinese_font_name
-
+from utils.screen_config import ScreenConfig
 from ui.menu_builders import TitleBuilder
 from ui.menu_builders import ModeSectionBuilder
 from ui.menu_builders import OptionsSectionBuilder
@@ -33,8 +33,8 @@ class MainMenuScreen(BoxLayout):
         """
         super().__init__(**kwargs)
         self.orientation = 'vertical'
-        self.padding = '20sp'
-        self.spacing = '10sp'
+        self.padding = ScreenConfig.scale_padding(20)
+        self.spacing = ScreenConfig.scale_spacing(10)
         
         self.on_start_game = on_start_game
         self.on_language = on_language
@@ -118,6 +118,11 @@ class MainMenuScreen(BoxLayout):
     def refresh_text(self):
         """Refresh all button texts after language change."""
         try:
+            # ✅ 添加：重新计算 padding 和 spacing
+            from utils.screen_config import ScreenConfig
+            self.padding = ScreenConfig.scale_spacing(20)
+            self.spacing = ScreenConfig.scale_spacing(10)
+
             print(f"[MainMenu] refresh_text called")
             self.clear_widgets()
             self.build_ui()

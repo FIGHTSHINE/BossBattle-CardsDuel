@@ -38,8 +38,8 @@ class PopupFactory:
             # Create popup content layout
             rules_content = BoxLayout(
                 orientation='vertical',
-                padding=MenuTheme.POPUP_PADDING,
-                spacing=MenuTheme.POPUP_SPACING
+                padding=MenuTheme.popup_spacing(),
+                spacing=MenuTheme.popup_spacing()
             )
             
             # Add semi-transparent background with rounded corners
@@ -57,7 +57,7 @@ class PopupFactory:
             # Title label
             title_label = Label(
                 text=t('POPUP_TITLE_RULES'),
-                font_size=MenuTheme.FONT_SIZE_POPUP_TITLE,
+                font_size=MenuTheme.font_size_popup_title(),
                 size_hint_y=MenuTheme.SIZE_HINT_RULES_TITLE,
                 bold=True,
                 color=MenuTheme.COLOR_RULES_TITLE,
@@ -70,7 +70,7 @@ class PopupFactory:
             # Rules text label
             rules_label = Label(
                 text=rules_text,
-                font_size=MenuTheme.FONT_SIZE_RULES_TEXT,
+                font_size=MenuTheme.font_size_rules_text(),
                 size_hint_y=MenuTheme.SIZE_HINT_RULES_TEXT,
                 font_name=font_name or 'Roboto',
                 halign=MenuTheme.RULES_TEXT_HALIGN,
@@ -84,14 +84,14 @@ class PopupFactory:
             # Button layout (horizontal)
             button_layout = BoxLayout(
                 orientation='horizontal',
-                spacing=MenuTheme.POPUP_BUTTON_SPACING,
+                spacing=MenuTheme.popup_button_spacing(),
                 size_hint_y=MenuTheme.SIZE_HINT_RULES_BUTTONS
             )
             
             # Back button
             back_btn = Button(
                 text=t('POPUP_BACK'),
-                font_size=MenuTheme.FONT_SIZE_POPUP_BTN,
+                font_size=MenuTheme.font_size_popup_btn(),
                 background_color=MenuTheme.COLOR_POPUP_BACK_BTN,
                 font_name=font_name or 'Roboto',
                 color=(1, 1, 1, 1)
@@ -100,7 +100,7 @@ class PopupFactory:
             # Confirm button
             confirm_btn = Button(
                 text=t('POPUP_CONFIRM'),
-                font_size=MenuTheme.FONT_SIZE_POPUP_BTN,
+                font_size=MenuTheme.font_size_popup_btn(),
                 background_color=MenuTheme.COLOR_POPUP_CONFIRM_BTN,
                 font_name=font_name or 'Roboto',
                 color=(1, 1, 1, 1)
@@ -148,14 +148,14 @@ class PopupFactory:
             # Create content layout
             about_content = BoxLayout(
                 orientation='vertical',
-                padding=MenuTheme.PADDING,
-                spacing=MenuTheme.SPACING
+                padding=MenuTheme.padding(),
+                spacing=MenuTheme.spacing()
             )
             
             # Title label
             title_label = Label(
                 text=t('MENU_ABOUT_TITLE'),
-                font_size=MenuTheme.FONT_SIZE_ABOUT_TITLE,
+                font_size=MenuTheme.font_size_about_title(),
                 bold=True,
                 font_name=font_name or 'Roboto'
             )
@@ -163,7 +163,7 @@ class PopupFactory:
             # Content label
             content_label = Label(
                 text=t('MENU_ABOUT_CONTENT'),
-                font_size=MenuTheme.FONT_SIZE_ABOUT_CONTENT,
+                font_size=MenuTheme.font_size_about_content(),
                 size_hint_y=MenuTheme.SIZE_HINT_ABOUT_CONTENT,
                 font_name=font_name or 'Roboto',
                 halign=MenuTheme.ABOUT_CONTENT_HALIGN,
@@ -174,7 +174,7 @@ class PopupFactory:
             # Close button
             close_btn = Button(
                 text='OK',
-                font_size=MenuTheme.FONT_SIZE_ABOUT_BTN,
+                font_size=MenuTheme.font_size_about_btn(),
                 size_hint_y=MenuTheme.SIZE_HINT_ABOUT_BTN,
                 background_color=(0.5, 0.5, 0.5, 1),
                 font_name=font_name or 'Roboto'

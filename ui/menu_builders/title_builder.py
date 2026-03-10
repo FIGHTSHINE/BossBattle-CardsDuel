@@ -21,7 +21,7 @@ class TitleBuilder:
         """
         title = Label(
             text=t('MENU_TITLE'),
-            font_size=MenuTheme.FONT_SIZE_TITLE,
+            font_size=MenuTheme.font_size_title(),
             size_hint_y=MenuTheme.SIZE_HINT_TITLE,
             color=MenuTheme.COLOR_TITLE,
             bold=True,

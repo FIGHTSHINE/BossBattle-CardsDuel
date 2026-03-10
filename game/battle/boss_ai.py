@@ -56,14 +56,16 @@ class BossAI:
             
             # Choose message based on whether player took damage
             if actual_damage > 0:
-                self.battle.player_hp -= actual_damage
+                # ✅ 限制最小值为 0
+                self.battle.player_hp = max(0, self.battle.player_hp - actual_damage)
                 result_text = T.MSG_BOSS_ATTACK_BLOCKED_PARTIAL['zh'].format(blocked, actual_damage)
             else:
                 result_text = T.MSG_BOSS_ATTACK_BLOCKED['zh'].format(blocked)
             
             print(f"[BOSS ATTACK] Damage: {damage} | Blocked: {blocked} | Actual: {actual_damage}")
         else:
-            self.battle.player_hp -= damage
+            # ✅ 限制最小值为 0
+            self.battle.player_hp = max(0, self.battle.player_hp - damage)
             result_text = T.MSG_BOSS_ATTACK_NO_SHIELD['zh'].format(damage)
             print(f"[BOSS ATTACK] Damage: {damage} | No shield")
         
@@ -90,25 +92,25 @@ class BossAI:
         self.battle.boss_special_attack_used = True
         self.battle.last_attack_was_special = True
         
-        print(f"[SPECIAL ATTACK] Damage: {damage}")
-        print(f"[SPECIAL ATTACK] Boss HP: {self.battle.boss_hp}/{self.battle.boss_max_hp} "
-              f"({self.battle.boss_hp/self.battle.boss_max_hp*100:.1f}%)")
+        print(f"\n[SPECIAL ATTACK] Boss special attack! (damage: {damage})")
         
         # Apply damage with shield absorption
         if self.battle.shield > 0:
             blocked = min(self.battle.shield, damage)
             actual_damage = damage - blocked
-            self.battle.shield -= blocked
+            self.battle.shield = max(0, self.battle.shield - blocked)
             
             if actual_damage > 0:
-                self.battle.player_hp -= actual_damage
+                # ✅ 限制最小值为 0
+                self.battle.player_hp = max(0, self.battle.player_hp - actual_damage)
                 result_text = T.MSG_BOSS_SPECIAL_BLOCKED_PARTIAL['zh'].format(blocked, actual_damage)
             else:
                 result_text = T.MSG_BOSS_SPECIAL_BLOCKED['zh'].format(blocked)
             
             print(f"[SPECIAL ATTACK] Damage: {damage} | Blocked: {blocked} | Actual: {actual_damage}")
         else:
-            self.battle.player_hp -= damage
+            # ✅ 限制最小值为 0
+            self.battle.player_hp = max(0, self.battle.player_hp - damage)
             result_text = T.MSG_BOSS_SPECIAL_NO_SHIELD['zh'].format(damage)
             print(f"[SPECIAL ATTACK] Damage: {damage} | No shield")
         

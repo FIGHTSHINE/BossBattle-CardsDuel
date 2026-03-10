@@ -2,7 +2,7 @@
 
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.boxlayout import BoxLayout
-
+from utils.screen_config import ScreenConfig
 from ui.ui_logger import UILogger
 
 
@@ -27,13 +27,13 @@ class HandDisplay(BoxLayout):
         # Create scroll area for cards
         self.scroll = ScrollView(
             size_hint_y=1,
-            bar_width='10sp'
+            bar_width=ScreenConfig.scale_spacing(10)
         )
         
         self.layout = BoxLayout(
             size_hint_y=None,
-            spacing='8sp',
-            padding='10sp'
+            spacing=ScreenConfig.scale_spacing(8),
+            padding=ScreenConfig.scale_spacing(10)
         )
         self.layout.bind(minimum_height=self.layout.setter('height'))
         

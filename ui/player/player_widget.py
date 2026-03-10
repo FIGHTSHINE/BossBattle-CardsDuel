@@ -5,7 +5,7 @@ from kivy.properties import NumericProperty
 from kivy.clock import Clock
 from ui.player.player_renderer import PlayerRenderer
 from ui.player.player_animations import PlayerAnimations
-
+from utils.screen_config import ScreenConfig
 
 class PlayerWidget(Widget):
     """Pixel art player graphics widget with state-based visuals."""
@@ -19,7 +19,7 @@ class PlayerWidget(Widget):
         
         # Set fixed size (slightly smaller than boss)
         self.size_hint = (None, None)
-        self.size = (80, 80)
+        self.size = ScreenConfig.calculate_player_size()
         
         # State tracking
         self.state = 'normal'  # normal, damaged, critical, attacking

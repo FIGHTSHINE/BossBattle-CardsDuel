@@ -5,7 +5,7 @@ from kivy.clock import Clock
 # ✅ 使用相对导入
 from .fireball_graphics import FireballGraphics
 from .fireball_animation import FireballAnimation
-
+from utils.screen_config import ScreenConfig
 
 class FireballProjectile(Widget):
     """Fireball projectile that flies from boss to player."""
@@ -18,8 +18,8 @@ class FireballProjectile(Widget):
         self._target_pos = target_pos
         self.on_hit_complete = on_hit_complete
         self.size_hint = (None, None)
-        self.width = 100
-        self.height = 100
+        self.width = ScreenConfig.scale_width(100)
+        self.height = ScreenConfig.scale_height(100)
         self.pos = (start_pos[0] - self.width/2, start_pos[1] - self.height/2)
         
         # Colors

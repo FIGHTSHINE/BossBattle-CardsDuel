@@ -4,7 +4,7 @@ from ui.animations import Animations
 from ui.ui_logger import UILogger
 from game.models import CardType
 from game.translations import t, language_manager
-
+from utils.screen_config import ScreenConfig
 
 class UIHandler:
     """Handles UI updates and events."""
@@ -161,7 +161,7 @@ class UIHandler:
         try:
             self.parent.boss_label.color = (0, 1, 0, 1)
             victory_text = t('MSG_VICTORY', turns)
-            self.parent.battle_area.text = f"[size=28][color=00ff00]{victory_text}[/color][/size]"
+            self.parent.battle_area.text = f"{ScreenConfig.get_markup_size(28)}[color=00ff00]{victory_text}[/color][/size]"
             self.parent.battle_area.color = (0, 1, 0, 1)
             self.logger.log_win_screen_displayed()
         except Exception as e:
@@ -179,7 +179,7 @@ class UIHandler:
         try:
             self.parent.player_label.color = (1, 0, 0, 1)
             defeat_text = t('MSG_DEFEAT', turns)
-            self.parent.battle_area.text = f"[size=28][color=ff3333]{defeat_text}[/color][/size]"
+            self.parent.battle_area.text = f"{ScreenConfig.get_markup_size(28)}[color=ff3333]{defeat_text}[/color][/size]"
             self.parent.battle_area.color = (1, 0.2, 0.2, 1)
             self.logger.log_lose_screen_displayed()
         except Exception as e:

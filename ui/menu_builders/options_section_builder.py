@@ -35,7 +35,7 @@ class OptionsSectionBuilder:
         # Options label
         options_label = Label(
             text=t('MENU_OPTIONS'),
-            font_size=MenuTheme.FONT_SIZE_OPTIONS_LABEL,
+            font_size=MenuTheme.font_size_options_label(),
             size_hint_y=MenuTheme.SIZE_HINT_OPTIONS_LABEL,
             color=MenuTheme.COLOR_OPTIONS_LABEL,
             font_name=font_name or 'Roboto'
@@ -45,7 +45,7 @@ class OptionsSectionBuilder:
         # Language button (blue)
         lang_btn = Button(
             text=t('MENU_LANGUAGE'),
-            font_size=MenuTheme.FONT_SIZE_OPTIONS_BTN,
+            font_size=MenuTheme.font_size_options_btn(),
             size_hint_y=MenuTheme.SIZE_HINT_OPTIONS_BTN,
             background_color=MenuTheme.COLOR_LANGUAGE,
             font_name=font_name or 'Roboto'
@@ -56,7 +56,7 @@ class OptionsSectionBuilder:
         # About button (purple)
         about_btn = Button(
             text=t('MENU_ABOUT'),
-            font_size=MenuTheme.FONT_SIZE_OPTIONS_BTN,
+            font_size=MenuTheme.font_size_options_btn(),
             size_hint_y=MenuTheme.SIZE_HINT_OPTIONS_BTN,
             background_color=MenuTheme.COLOR_ABOUT,
             font_name=font_name or 'Roboto'
@@ -67,7 +67,7 @@ class OptionsSectionBuilder:
         # Exit button (red)
         exit_btn = Button(
             text=t('MENU_EXIT'),
-            font_size=MenuTheme.FONT_SIZE_OPTIONS_BTN,
+            font_size=MenuTheme.font_size_options_btn(),
             size_hint_y=MenuTheme.SIZE_HINT_OPTIONS_BTN,
             background_color=MenuTheme.COLOR_EXIT,
             font_name=font_name or 'Roboto'
@@ -78,7 +78,7 @@ class OptionsSectionBuilder:
         # Language indicator
         lang_indicator = Label(
             text=f"Language: {language_manager.current_language.upper()} | 语言: {language_manager.current_language.upper()}",
-            font_size=MenuTheme.FONT_SIZE_LANG_INDICATOR,
+            font_size=MenuTheme.font_size_lang_indicator(),
             size_hint_y=MenuTheme.SIZE_HINT_LANG_INDICATOR,
             color=MenuTheme.COLOR_LANG_INDICATOR,
             font_name=font_name or 'Roboto'

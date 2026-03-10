@@ -2,7 +2,7 @@
 
 from kivy.uix.widget import Widget
 from kivy.properties import NumericProperty
-
+from utils.screen_config import ScreenConfig
 # from boss_battle.ui.boss.boss_renderer import BossRenderer
 # from boss_battle.ui.boss.boss_animations import BossAnimations
 from ui.boss.boss_renderer import BossRenderer
@@ -19,7 +19,7 @@ class BossWidget(Widget):
         
         # Set fixed size
         self.size_hint = (None, None)
-        self.size = (100, 100)
+        self.size = ScreenConfig.calculate_boss_size()
         
         # State tracking
         self.state = 'normal'  # normal, damaged, critical

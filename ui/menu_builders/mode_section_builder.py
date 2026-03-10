@@ -26,7 +26,7 @@ class ModeSectionBuilder:
         # Game mode selection label
         mode_label = Label(
             text=t('MENU_SELECT_MODE'),
-            font_size=MenuTheme.FONT_SIZE_MODE_LABEL,
+            font_size=MenuTheme.font_size_mode_label(),
             size_hint_y=MenuTheme.SIZE_HINT_MODE_LABEL,
             color=MenuTheme.COLOR_MODE_LABEL,
             bold=True,
@@ -37,7 +37,7 @@ class ModeSectionBuilder:
         # Boss Duel button (working mode - green)
         boss_duel_btn = Button(
             text=t('MENU_MODE_BOSS_DUEL'),
-            font_size=MenuTheme.FONT_SIZE_BOSS_DUEL,
+            font_size=MenuTheme.font_size_boss_duel(),
             size_hint_y=MenuTheme.SIZE_HINT_BOSS_DUEL,
             bold=True,
             background_color=MenuTheme.COLOR_BOSS_DUEL,
@@ -49,7 +49,7 @@ class ModeSectionBuilder:
         # Survival Mode (coming soon - grayed out)
         survival_btn = Button(
             text=t('MENU_MODE_SURVIVAL'),
-            font_size=MenuTheme.FONT_SIZE_OTHER_MODES,
+            font_size=MenuTheme.font_size_other_modes(),
             size_hint_y=MenuTheme.SIZE_HINT_OTHER_MODES,
             background_color=MenuTheme.COLOR_SURVIVAL,
             font_name=font_name or 'Roboto',
@@ -60,7 +60,7 @@ class ModeSectionBuilder:
         # PvP Mode (coming soon - grayed out)
         pvp_btn = Button(
             text=t('MENU_MODE_PVP'),
-            font_size=MenuTheme.FONT_SIZE_OTHER_MODES,
+            font_size=MenuTheme.font_size_other_modes(),
             size_hint_y=MenuTheme.SIZE_HINT_OTHER_MODES,
             background_color=MenuTheme.COLOR_PVP,
             font_name=font_name or 'Roboto',

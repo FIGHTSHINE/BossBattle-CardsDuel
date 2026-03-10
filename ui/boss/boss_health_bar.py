@@ -6,7 +6,7 @@ from kivy.uix.widget import Widget
 from kivy.graphics import Color, Rectangle, Line
 from kivy.properties import NumericProperty, ListProperty
 from kivy.animation import Animation
-
+from utils.screen_config import ScreenConfig
 
 class BossHealthBar(BoxLayout):
     """Dynamic health bar with color changes and animations."""
@@ -20,13 +20,13 @@ class BossHealthBar(BoxLayout):
         super().__init__(**kwargs)
         self.orientation = 'vertical'
         self.size_hint_y = None
-        self.height = '60sp'
-        self.spacing = '5sp'
+        self.height = ScreenConfig.scale_height(60)
+        self.spacing = ScreenConfig.scale_spacing(5)
         
         # HP label
         self.hp_label = Label(
             text=f"BOSS: {self.current_hp}/{self.max_hp}",
-            font_size='20sp',
+            font_size=ScreenConfig.scale_font_size(20),
             size_hint_y=0.3,
             bold=True,
             color=(1, 1, 1, 1),
@@ -39,7 +39,7 @@ class BossHealthBar(BoxLayout):
         self.health_bar_container = BoxLayout(
             orientation='horizontal',
             size_hint_y=0.7,
-            padding='2sp'
+            padding=ScreenConfig.scale_padding(2)
         )
         self.add_widget(self.health_bar_container)
         
