@@ -7,4 +7,4 @@ ON windows10/11 playing
 on git bash or command input "pip install kivy>=2.3.0"
 
 2、execute order 
-on this dictory execute command and input order "python main.py"
+on this dictory execute command and input ordering "python main.py"
